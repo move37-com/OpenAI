@@ -166,6 +166,11 @@ final class ServerSentEventsStreamParser: @unchecked Sendable {
         }
     }
     
+    /// Used for parsing event types from incoming stream data for OpenRouter.
+    private struct EventTypeObject: Decodable {
+        let type: String
+    }
+    
     /// https://html.spec.whatwg.org/multipage/server-sent-events.html#dispatchMessage
     ///
     /// When the user agent is required to dispatch the event, the user agent must process the data buffer, the event type buffer, and the last event ID buffer using steps appropriate for the user agent.
@@ -200,11 +205,25 @@ final class ServerSentEventsStreamParser: @unchecked Sendable {
         // - we don't have a notion of event source, so we'll just put id into the event itself
         
         // 6. If the event type buffer has a value other than the empty string, change the type of the newly created event to equal the value of the event type buffer.
+
+        /*
+            Patch for OpenRouter API: they don't sent "event" stream lines like OpenAI, so `eventTypeBuffer` is always empty (which throws an error downstream).
+            So instead we read the event type from the "data" JSON object.
+        */
+        var eventType = eventTypeBuffer
+        if eventType.isEmpty {
+            if let typeObj = try? JSONDecoder().decode(EventTypeObject.self, from: dataBuffer) {
+                eventType = typeObj.type
+            } else {
+                eventType = "message" // Keep library's original fallback
+            }
+        }
+        
         let event = Event(
             id: lastEventIdBuffer,
             data: dataBuffer,
-            decodedData: .init(data: dataBuffer, encoding: .utf8) ?? "",
-            eventType: eventTypeBuffer.isEmpty ? "message" : eventTypeBuffer,
+            decodedData: String(data: dataBuffer, encoding: .utf8) ?? "",
+            eventType: eventType,
             retry: retry
         )
         
