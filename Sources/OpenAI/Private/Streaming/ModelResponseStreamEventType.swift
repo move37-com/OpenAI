@@ -68,6 +68,10 @@ enum ModelResponseStreamEventType: String {
     case responseReasoningDelta = "response.reasoning.delta"
     case responseReasoningDone = "response.reasoning.done"
     
+    // These are getting returned in OpenRouter requests w/ Gemini 2.5 Pro model
+//    case responseReasoningTextDelta = "response.reasoning_text.delta"
+//    case responseReasoningTextDone = "response.reasoning_text.done"
+    
     case responseReasoningSummaryDelta = "response.reasoning_summary.delta"
     case responseReasoningSummaryDone = "response.reasoning_summary.done"
     

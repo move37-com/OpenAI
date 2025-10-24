@@ -70,7 +70,7 @@ public struct ResponseObject: Codable, Equatable, Sendable {
     /// Configuration options for a text response from the model. Can be plain text or structured JSON data. Learn more:
     /// - [Text inputs and outputs](https://platform.openai.com/docs/guides/text)
     /// - [Structured Outputs](https://platform.openai.com/docs/guides/structured-outputs)
-    public let text: ResponseProperties.TextPayload
+    public let text: ResponseProperties.TextPayload?
     
     /// How the model should select which tool (or tools) to use when generating a response. See the `tools` parameter to see how to specify which tools the model can call.
     public let toolChoice: ResponseProperties.ToolChoicePayload

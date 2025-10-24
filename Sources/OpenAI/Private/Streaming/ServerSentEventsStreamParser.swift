@@ -204,26 +204,21 @@ final class ServerSentEventsStreamParser: @unchecked Sendable {
         // - we ignore origin for now, will implement later if needed
         // - we don't have a notion of event source, so we'll just put id into the event itself
         
-        // 6. If the event type buffer has a value other than the empty string, change the type of the newly created event to equal the value of the event type buffer.
-
-        /*
-            Patch for OpenRouter API: they don't sent "event" stream lines like OpenAI, so `eventTypeBuffer` is always empty (which throws an error downstream).
-            So instead we read the event type from the "data" JSON object.
-        */
-        var eventType = eventTypeBuffer
-        if eventType.isEmpty {
-            if let typeObj = try? JSONDecoder().decode(EventTypeObject.self, from: dataBuffer) {
-                eventType = typeObj.type
-            } else {
-                eventType = "message" // Keep library's original fallback
-            }
+        
+        // Patch for OpenRouter: it send a [DONE] line at the end of a response, which isn't handled normally
+        let decodedData = String(data: dataBuffer, encoding: .utf8) ?? ""
+        if decodedData == "[DONE]" {
+            eventTypeBuffer = .init()
+            retry = nil
+            return
         }
         
+        // 6. If the event type buffer has a value other than the empty string, change the type of the newly created event to equal the value of the event type buffer.
         let event = Event(
             id: lastEventIdBuffer,
             data: dataBuffer,
-            decodedData: String(data: dataBuffer, encoding: .utf8) ?? "",
-            eventType: eventType,
+            decodedData: decodedData,
+            eventType: eventTypeBuffer.isEmpty ? "message" : eventTypeBuffer,
             retry: retry
         )
         

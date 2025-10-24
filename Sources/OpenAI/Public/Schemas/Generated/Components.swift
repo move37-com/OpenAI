@@ -7664,6 +7664,8 @@ public enum Components {
             /// - Remark: Generated from `#/components/schemas/ResponseReasoningDeltaEvent/type`.
             @frozen public enum _TypePayload: String, Codable, Hashable, Sendable, CaseIterable {
                 case response_reasoning_delta = "response.reasoning.delta"
+                // Getting returned by OpenRouter for Gemini 2.5 Pro:
+                case response_reasoning_text_delta = "response.reasoning_text.delta"
             }
             /// The type of the event. Always 'response.reasoning.delta'.
             ///
@@ -7732,6 +7734,8 @@ public enum Components {
             /// - Remark: Generated from `#/components/schemas/ResponseReasoningDoneEvent/type`.
             @frozen public enum _TypePayload: String, Codable, Hashable, Sendable, CaseIterable {
                 case response_reasoning_done = "response.reasoning.done"
+                // Getting returned by OpenRouter for Gemini 2.5 Pro:
+                case response_reasoning_text_done = "response.reasoning_text.done"
             }
             /// The type of the event. Always 'response.reasoning.done'.
             ///

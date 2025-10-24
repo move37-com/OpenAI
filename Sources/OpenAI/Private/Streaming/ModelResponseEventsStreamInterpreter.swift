@@ -66,11 +66,16 @@ final class ModelResponseEventsStreamInterpreter: @unchecked Sendable, StreamInt
         }
 
         guard let modelResponseEventType = ModelResponseStreamEventType(rawValue: eventType) else {
-            throw InterpreterError.unknownEventType(eventType)
+            print("OpenAI SDK: ignoring unknown event type: \(eventType)")
+            return
         }
         
-        let responseStreamEvent = try responseStreamEvent(modelResponseEventType: modelResponseEventType, data: finalEvent.data)
-        onEventDispatched?(responseStreamEvent)
+        do {
+            let responseStreamEvent = try responseStreamEvent(modelResponseEventType: modelResponseEventType, data: finalEvent.data)
+            onEventDispatched?(responseStreamEvent)
+        } catch {
+            print("OpenAI SDK: ignoring un-decodable event of type: \(eventType)")
+        }
     }
 
     private func processError(_ error: Error) {
