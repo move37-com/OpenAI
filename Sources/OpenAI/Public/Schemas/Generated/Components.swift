@@ -9283,7 +9283,7 @@ public enum Components {
             /// A detailed breakdown of the input tokens.
             ///
             /// - Remark: Generated from `#/components/schemas/ResponseUsage/input_tokens_details`.
-            public var inputTokensDetails: Components.Schemas.ResponseUsage.InputTokensDetailsPayload
+            public var inputTokensDetails: Components.Schemas.ResponseUsage.InputTokensDetailsPayload?
             /// The number of output tokens.
             ///
             /// - Remark: Generated from `#/components/schemas/ResponseUsage/output_tokens`.
@@ -9310,7 +9310,7 @@ public enum Components {
             /// A detailed breakdown of the output tokens.
             ///
             /// - Remark: Generated from `#/components/schemas/ResponseUsage/output_tokens_details`.
-            public var outputTokensDetails: Components.Schemas.ResponseUsage.OutputTokensDetailsPayload
+            public var outputTokensDetails: Components.Schemas.ResponseUsage.OutputTokensDetailsPayload?
             /// The total number of tokens used.
             ///
             /// - Remark: Generated from `#/components/schemas/ResponseUsage/total_tokens`.

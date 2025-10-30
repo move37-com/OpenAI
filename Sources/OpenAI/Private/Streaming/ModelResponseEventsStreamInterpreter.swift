@@ -69,6 +69,7 @@ final class ModelResponseEventsStreamInterpreter: @unchecked Sendable, StreamInt
             print("OpenAI SDK: ignoring unknown event type: \(eventType)")
             return
         }
+//        print(eventType)
         
         do {
             let responseStreamEvent = try responseStreamEvent(modelResponseEventType: modelResponseEventType, data: finalEvent.data)
